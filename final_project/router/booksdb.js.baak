@@ -1,0 +1,32 @@
+let books = {
+      "9780140449136": { "author": "Chinua Achebe", "title": "Things Fall Apart", "reviews": {} },
+      "9780525566151": { "author": "Hans Christian Andersen", "title": "Fairy tales", "reviews": {} },
+      "9780140449266": { "author": "Dante Alighieri", "title": "The Divine Comedy", "reviews": {} },
+      "9780140449181": { "author": "Unknown", "title": "The Epic Of Gilgamesh", "reviews": {} },
+      "9780140449273": { "author": "Unknown", "title": "The Book Of Job", "reviews": {} },
+      "9780140449198": { "author": "Unknown", "title": "One Thousand and One Nights", "reviews": {} },
+      "9780140449204": { "author": "Unknown", "title": "Njál's Saga", "reviews": {} },
+      "9780141439518": { "author": "Jane Austen", "title": "Pride and Prejudice", "reviews": {} },
+      "9782070413119": { "author": "Honoré de Balzac", "title": "Le Père Goriot", "reviews": {} },
+      "9780811214963": { "author": "Samuel Beckett", "title": "Molloy, Malone Dies, The Unnamable, the trilogy", "reviews": {} },
+      "B1X7Z9QP": { "author": "Mary Shelley", "title": "Frankenstein", "reviews": {} },
+      "A9C3L5MN": { "author": "Leo Tolstoy", "title": "War and Peace", "reviews": {} },
+      "XK3W82JD": { "author": "Gabriel García Márquez", "title": "One Hundred Years of Solitude", "reviews": {} },
+      "PL9R8YTZ": { "author": "Homer", "title": "The Odyssey", "reviews": {} },
+      "MV7T3QKA": { "author": "Franz Kafka", "title": "The Metamorphosis", "reviews": {} }
+};
+
+let books3 = {
+      "9780140449136": { "author": "Chinua Achebe", "title": "Things Fall Apart", "reviews": {} },
+      "9780140449181": { "author": "Unknown", "title": "The Epic Of Gilgamesh", "reviews": {} },
+      "9780140449198": { "author": "Unknown", "title": "One Thousand and One Nights", "reviews": {} },
+      "9780140449204": { "author": "Unknown", "title": "Njál's Saga", "reviews": {} },
+      "9780140449266": { "author": "Dante Alighieri", "title": "The Divine Comedy", "reviews": {} },
+      "9780140449273": { "author": "Unknown", "title": "The Book Of Job", "reviews": {} },
+      "9780141439518": { "author": "Jane Austen", "title": "Pride and Prejudice", "reviews": {} },
+      "9780525566151": { "author": "Hans Christian Andersen", "title": "Fairy tales", "reviews": {} },
+      "9780811214963": { "author": "Samuel Beckett", "title": "Molloy, Malone Dies, The Unnamable, the trilogy", "reviews": {} },
+      "9782070413119": { "author": "Honoré de Balzac", "title": "Le Père Goriot", "reviews": {} }
+};
+
+module.exports = books;
