@@ -70,14 +70,21 @@ public_users.get('/title/:title', function (req, res) {
 
   // using object.values method
   // let booksByTitle = Object.values(books).filter((book) => book.title === titleParams);
-  
+
   res.send(JSON.stringify(booksByTitle, null, 4));
 });
 
 //  Get book review
 public_users.get('/review/:isbn', function (req, res) {
   //Write your code here
-  return res.status(300).json({ message: "Yet to be implemented" });
+  // return res.status(300).json({ message: "Yet to be implemented" });
+  const { isbn: isbnParams } = req.params;
+  let { ["reviews"]: bookByISBN } = books[isbnParams] || {}; // Using optional chaining to avoid error if bookByISBN is undefined
+  // let bookByISBN = books[isbnParams]?.reviews;
+  if (!bookByISBN) {
+    return res.status(404).json({ message: "Invalid ISBN Book" });
+  }
+  res.send(JSON.stringify(bookByISBN, null, 4));
 });
 
 module.exports.general = public_users;
