@@ -115,7 +115,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     } else {
       // delete userReview (invalid because it just a copy of the bookByISBN.reviews[username])
       delete bookByISBN.reviews[username] // delete the review of the user
-      return res.status(200).json({ message: `Review for book with ISBN ${isbn} has been deleted`, isbn: isbn }) && console.log("Review for this book has been deleted successfully");
+      return res.status(200).json({ message: `Review for book with ISBN ${isbn} has been deleted`, isbn: isbn }) && console.log(`Review for this book with isbn : ${isbn} has been deleted successfully`);
     }
   }
 })

@@ -3,11 +3,12 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const dotEnv = require('dotenv').config();
+const axios = require('axios');
 
+const baseURL = process.env.API_URL || "http://localhost:5000";
 
 public_users.post("/register", (req, res) => {
-  //Write your code here
-  // return res.status(300).json({ message: "Yet to be implemented" });
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(400).json({ message: "Username and password are required" }) && console.log(users);
@@ -20,16 +21,26 @@ public_users.post("/register", (req, res) => {
 });
 
 // Get the book list available in the shop
+/*
 public_users.get('/', function (req, res) {
-  //Write your code here
-  // return res.status(300).json({message: "Yet to be implemented"});
   res.send(JSON.stringify(books, null, 4));
 });
+*/
+
+// async await with axios
+public_users.get('/', async (req, res) => {
+  try {
+    const response = await axios.get(`${baseURL}`)
+    const booksData = response.data;
+    res.send(JSON.stringify(booksData, null, 4));
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    res.status(500).json({ message: "Error fetching books", error: error.message });
+  }
+})
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
-  //Write your code here
-  // return res.status(300).json({message: "Yet to be implemented"});
   const { isbn } = req.params;
   const { [isbn]: bookByISBN } = books;
   res.send(JSON.stringify(bookByISBN, null, 4));
@@ -37,8 +48,6 @@ public_users.get('/isbn/:isbn', function (req, res) {
 
 // Get book details based on author
 public_users.get('/author/:author', function (req, res) {
-  //Write your code here
-  // return res.status(300).json({message: "Yet to be implemented"});
   const { author: authorParams } = req.params;
   let booksByAuthor = [];
   let key = Object.keys(books);
@@ -66,8 +75,6 @@ public_users.get('/author/:author', function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
-  //Write your code here
-  // return res.status(300).json({message: "Yet to be implemented"});
   const { title: titleParams } = req.params;
   let keys = Object.keys(books);
   let booksByTitle = [];
@@ -85,8 +92,6 @@ public_users.get('/title/:title', function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn', function (req, res) {
-  //Write your code here
-  // return res.status(300).json({ message: "Yet to be implemented" });
   const { isbn: isbnParams } = req.params;
   let { ["reviews"]: bookByISBN } = books[isbnParams] || {}; // Using optional chaining to avoid error if bookByISBN is undefined
   // let bookByISBN = books[isbnParams]?.reviews;
@@ -95,5 +100,11 @@ public_users.get('/review/:isbn', function (req, res) {
   }
   res.send(JSON.stringify(bookByISBN, null, 4));
 });
+
+// axios url endpoint
+public_users.get('/axios', (req, res) => {
+  //Endpoint to retrive all books
+  res.send(JSON.stringify(books, null, 4));
+})
 
 module.exports.general = public_users;

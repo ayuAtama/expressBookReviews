@@ -3,12 +3,15 @@ const jwt = require('jsonwebtoken');
 const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
+const dotEnv = require('dotenv').config();
 
 const app = express();
 
+const secretKey = process.env.SECRET_KEY || "fingerprint_customer"
+
 app.use(express.json());
 
-app.use("/customer", session({ secret: "fingerprint_customer", resave: true, saveUninitialized: true }))
+app.use("/customer", session({ secret: secretKey, resave: true, saveUninitialized: true }))
 
 app.use("/customer/auth/*", function auth(req, res, next) {
     //Write the authenication mechanism here
@@ -27,7 +30,7 @@ app.use("/customer/auth/*", function auth(req, res, next) {
     }
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);
