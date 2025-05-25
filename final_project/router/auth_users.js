@@ -93,11 +93,32 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       bookByISBN.reviews = {};
     } else {
       bookByISBN.reviews[username] = review.reviews; // add the review of the user
-      return res.status(200).json({ message: `Review for book with ISBN ${isbn} has been added`, isbn: isbn, review: review.reviews, username : username }) && console.log("Review for this book has been added successfully");
+      return res.status(200).json({ message: `Review for book with ISBN ${isbn} has been added`, isbn: isbn, review: review.reviews, username: username }) && console.log("Review for this book has been added successfully");
     }
   }
 
 });
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const { isbn } = req.params;
+  const { username } = req.session.authorization;
+  const { [isbn]: bookByISBN } = books;
+  const { [username]: userReview } = bookByISBN.reviews;
+  if (!isbn) {
+    return res.status(400).json({ message: "ISBN is required" });
+  } else {
+    if (!bookByISBN) {
+      return res.status(404).json({ message: "Book not found" });
+    } else if (!userReview) {
+      return res.status(404).json({ message: "The user has not reviewed this book yet" });
+    } else {
+      // delete userReview (invalid because it just a copy of the bookByISBN.reviews[username])
+      delete bookByISBN.reviews[username] // delete the review of the user
+      return res.status(200).json({ message: `Review for book with ISBN ${isbn} has been deleted`, isbn: isbn }) && console.log("Review for this book has been deleted successfully");
+    }
+  }
+})
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
