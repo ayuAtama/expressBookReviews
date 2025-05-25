@@ -73,6 +73,32 @@ regd_users.post("/login", (req, res) => {
   }
 });
 
+// Add a book review
+regd_users.put("/auth/review/:isbn", (req, res) => {
+  //Write your code here
+  // return res.status(300).json({ message: "Yet to be implemented" });
+  const { isbn } = req.params;
+  const { username } = req.session.authorization;
+  const { [isbn]: bookByISBN } = books;
+  const { query: review } = req;
+
+  if (!isbn) {
+    return res.status(400).send({ message: "ISBN is required" });
+  } else if (!bookByISBN) {
+    return res.status(404).send({ message: "Book not found" });
+  } else if (!review || !review.reviews) {
+    return res.status(400).send({ message: "Review is required" });
+  } else {
+    if (!bookByISBN.reviews) {
+      bookByISBN.reviews = {};
+    } else {
+      bookByISBN.reviews[username] = review.reviews; // add the review of the user
+      return res.status(200).json({ message: `Review for book with ISBN ${isbn} has been added`, isbn: isbn, review: review.reviews, username : username }) && console.log("Review for this book has been added successfully");
+    }
+  }
+
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
