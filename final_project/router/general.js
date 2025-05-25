@@ -27,7 +27,7 @@ public_users.get('/', function (req, res) {
 });
 */
 
-// async await with axios
+// async await with axios version
 public_users.get('/', async (req, res) => {
   try {
     const response = await axios.get(`${baseURL}`)
@@ -40,13 +40,34 @@ public_users.get('/', async (req, res) => {
 })
 
 // Get book details based on ISBN
+/*
 public_users.get('/isbn/:isbn', function (req, res) {
   const { isbn } = req.params;
   const { [isbn]: bookByISBN } = books;
   res.send(JSON.stringify(bookByISBN, null, 4));
 });
+*/
+
+//async await with axios version
+public_users.get('/isbn/:isbn', async (req, res) => {
+  const { isbn } = req.params;
+  try {
+    const response = await axios.get(`${baseURL}`)
+    const { data: booksData } = response;
+    const { [isbn]: bookByISBN } = booksData;
+    if (!bookByISBN) {
+      return res.status(404).send("Invalid ISBN Book");
+    } else {
+      res.send(JSON.stringify(bookByISBN, null, 4));
+    }
+  } catch (err) {
+    console.error("Error fetching book by ISBN:" + isbn, err)
+    res.status(500).json({ message: "Error fetching book by ISBN", error: err.message });
+  }
+})
 
 // Get book details based on author
+/*
 public_users.get('/author/:author', function (req, res) {
   const { author: authorParams } = req.params;
   let booksByAuthor = [];
@@ -72,8 +93,30 @@ public_users.get('/author/:author', function (req, res) {
   // console.log(key[0]);
   // console.log(key[4]);
 });
+*/
+
+// async await with axios version
+public_users.get('/author/:author', async (req, res) => {
+  const { author: authorParams } = req.params;
+  try {
+    const response = await axios.get(`${baseURL}`);
+    const { data: booksData } = response;
+    let booksByAuthor = [];
+    let keys = Object.keys(booksData);
+    for (let i = 0; i < keys.length; i++) {
+      if (booksData[keys[i]]['author'] === authorParams) {
+        booksByAuthor.push(booksData[keys[i]]);
+      }
+    }
+    res.send(JSON.stringify(booksByAuthor, null, 4));
+  } catch (error) {
+    console.error("Error fetching books by author:", error);
+    return res.status(500).json({ message: "Error fetching books by author", error: error.message });
+  }
+})
 
 // Get all books based on title
+/*
 public_users.get('/title/:title', function (req, res) {
   const { title: titleParams } = req.params;
   let keys = Object.keys(books);
@@ -89,6 +132,32 @@ public_users.get('/title/:title', function (req, res) {
 
   res.send(JSON.stringify(booksByTitle, null, 4));
 });
+*/
+
+// async await with axios version
+public_users.get('/title/:title', async (req, res) => {
+  const { title: titleParams } = req.params;
+  try {
+    const response = await axios.get(`${baseURL}`);
+    const { data: booksData } = response;
+    let keys = Object.keys(booksData);
+    let booksByTitle = [];
+    for (let i = 0; i < keys.length; i++) {
+      if (booksData[keys[i]]['title'] === titleParams) {
+        booksByTitle.push(booksData[keys[i]]);
+      }
+    }
+    if (booksByTitle.length === 0) {
+      return res.status(404).json({ message: "No books found with the given title" });
+    } else {
+      return res.send(JSON.stringify(booksByTitle, null, 4));
+    }
+  }
+  catch (error) {
+    console.error("Error fetching books by title:", error);
+    return res.status(500).json({ message: "Error fetching books by title", error: error.message });
+  }
+})
 
 //  Get book review
 public_users.get('/review/:isbn', function (req, res) {
